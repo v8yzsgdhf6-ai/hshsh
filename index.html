@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Протокол испытаний №0042</title>
+<style>
+:root{
+  --bg:#dfe6e9;--paper:#f7f5ee;--ink:#1d2a33;--line:#9fb0b8;--stamp:#d1242f;--btn:#1f5f8b;--btn2:#0f3d5c;--water:#3aa0d8;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10181d;--paper:#1a252c;--ink:#e8eef1;--line:#44585f;--stamp:#ff5a63;--btn:#2b86c2;--btn2:#1b5d8a}}
+:root[data-theme="dark"]{--bg:#10181d;--paper:#1a252c;--ink:#e8eef1;--line:#44585f;--stamp:#ff5a63;--btn:#2b86c2;--btn2:#1b5d8a}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:"Courier New",Courier,monospace;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px;background-blend-mode:soft-light;
+  display:flex;align-items:center;justify-content:center}
+.sheet{position:relative;z-index:2;width:min(92vw,460px);background:var(--paper);padding:26px 22px 28px;border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);transform:rotate(-1deg)}
+.head{display:flex;justify-content:space-between;font-size:12px;border-bottom:2px dashed var(--line);padding-bottom:10px;margin-bottom:18px}
+.row{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;border-bottom:1px solid var(--line)}
+.row b{font-weight:700}
+h1{font-family:Impact,"Arial Narrow Bold",sans-serif;font-weight:400;font-size:clamp(34px,10.5vw,50px);line-height:1.02;margin:22px 0 8px;letter-spacing:.5px}
+.sub{font-size:14px;margin:0 0 22px;min-height:36px}
+.btns{display:flex;gap:14px;align-items:center;min-height:60px}
+button{font:inherit;font-weight:700;font-size:17px;padding:13px 20px;cursor:pointer;border:2px solid var(--ink);color:#fff;background:var(--btn);box-shadow:4px 4px 0 var(--ink)}
+button:active{box-shadow:1px 1px 0 var(--ink);transform:translate(3px,3px)}
+button:focus-visible{outline:3px solid var(--stamp);outline-offset:3px}
+#no{background:var(--btn2)}
+#no.fly{position:fixed;z-index:6;transition:left .22s cubic-bezier(.3,1.5,.5,1),top .22s cubic-bezier(.3,1.5,.5,1)}
+.drops{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.d{position:absolute;top:-30px;width:10px;height:15px;background:var(--water);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;opacity:.75;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh)}}
+.win{display:none}
+.won .ask{display:none}.won .win{display:block}
+.stamp{display:inline-block;border:5px solid var(--stamp);color:var(--stamp);font-family:Impact,sans-serif;font-size:clamp(28px,9vw,40px);padding:6px 14px;margin:14px 0;transform:rotate(-8deg);animation:slam .35s cubic-bezier(.2,2,.4,1) both}
+@keyframes slam{from{transform:rotate(-8deg) scale(3);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none}}
+</style>
+</head>
+<body>
+<div class="drops" id="drops"></div>
+<main class="sheet" id="sheet">
+  <div class="head"><span>ОТК · ЛАБОРАТОРИЯ</span><span>ПРОТОКОЛ №0042</span></div>
+  <div class="ask">
+    <div class="row"><span>Объект испытаний</span><b>Ты</b></div>
+    <div class="row"><span>Тест на герметичность</span><b>не пройден</b></div>
+    <h1>Ты гондон дырявый</h1>
+    <p class="sub" id="sub">Комиссия просит подтвердить результат.</p>
+    <div class="btns">
+      <button id="yes">Да</button>
+      <button id="no">Нет</button>
+    </div>
+  </div>
+  <div class="win">
+    <div class="row"><span>Статус</span><b>закрыт</b></div>
+    <div class="stamp">ДЕФЕКТ ПОДТВЕРЖДЁН</div>
+    <p class="sub">Признание принято. Течь зафиксирована, в брак его. 💦<br>Претензии не принимаются.</p>
+  </div>
+</main>
+<script>
+const no=document.getElementById('no'),yes=document.getElementById('yes'),sub=document.getElementById('sub');
+const ph=["Апелляция отклонена.","Кнопка вышла на перерыв.","Результат уже в архиве.","Течь не обсуждается.","Попытка засчитана как признание.","Комиссия смеётся.","Давно пора нажать «Да»."];
+let n=0,s=1;
+function flee(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  if(!no.classList.contains('fly')){no.style.width=no.getBoundingClientRect().width+'px';document.body.appendChild(no);no.classList.add('fly')}
+  const m=14,w=no.offsetWidth,h=no.offsetHeight;
+  no.style.left=(m+Math.random()*(innerWidth-w-2*m))+'px';
+  no.style.top=(m+Math.random()*(innerHeight-h-2*m))+'px';
+  sub.textContent=ph[n++%ph.length];
+  s=Math.min(s+.08,1.5);yes.style.transform='scale('+s+')';
+}
+['mouseenter','pointerdown','touchstart','click','focus'].forEach(v=>no.addEventListener(v,flee,{passive:false}));
+document.addEventListener('mousemove',e=>{
+  if(!no.classList.contains('fly'))return;
+  const r=no.getBoundingClientRect();
+  if(Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<90)flee();
+});
+let rate=700;
+function drop(){
+  const d=document.createElement('div');d.className='d';
+  d.style.left=Math.random()*100+'vw';d.style.animationDuration=(2+Math.random()*2.5)+'s';
+  document.getElementById('drops').appendChild(d);setTimeout(()=>d.remove(),4800);
+}
+setInterval(drop,rate);
+yes.addEventListener('click',()=>{
+  document.getElementById('sheet').classList.add('won');no.remove();
+  for(let i=0;i<50;i++)setTimeout(drop,i*40);
+  setInterval(drop,120);
+});
+</script>
+</body>
+</html>
